@@ -1,91 +1,77 @@
-# quanti-jobs-scraping
+# Repositorio de replicación de El Quantificador
 
-## Overview
+Este repositorio reúne los datos, el código y el artículo de una publicación
+de [El Quantificador](https://elquantificador.org/), el blog de análisis
+cuantitativo del Laboratorio de Investigación para el Desarrollo del Ecuador
+(LIDE). Todos los repositorios de artículos de El Quantificador tienen este
+mismo README y esta misma estructura de carpetas.
 
-Analisis reproducible en R del mercado laboral de datos en Ecuador, con foco en las herramientas y competencias tecnicas que aparecen en ofertas publicas de empleo.
+Los datos propios de cada artículo (título, autoría, fuentes, estado y
+salidas) están en [`documentation/ficha.md`](documentation/ficha.md).
 
-Este repositorio usa cortes acumulados de ofertas laborales publicas en Multitrabajos, Computrabajo y Mipleo, tomados entre el 17 de junio y el 26 de julio de 2026. Contiene el dataset de entrada para el analisis, el codigo para construir la muestra analitica y las salidas que alimentan un articulo tecnico de El Quantificador. No publica el codigo de scraping ni su metodologia detallada.
+## Cómo replicar
 
-## How to Replicate
+1. Clona el repositorio y abre el archivo `.Rproj` de la raíz con RStudio, o
+   abre una terminal en la raíz del repositorio.
+2. Instala los paquetes de R que figuran en `documentation/ficha.md`.
+3. Corre desde la raíz:
 
-1. Abre el proyecto desde la raiz del repositorio.
-2. Verifica que tengas instalados `dplyr`, `ggplot2`, `readr`, `scales`, `stringr` y `tidyr`.
-3. Corre `source("MASTER.R")`.
+   ```text
+   Rscript MASTER.R
+   ```
 
-`MASTER.R` acumula los cortes disponibles de junio y julio, construye la muestra analitica y luego exporta tablas, figuras y un resumen serializado.
+`MASTER.R` descarga los insumos a `data/raw/`, los limpia, calcula los
+resultados y escribe tablas y figuras en `outputs/`. También copia las
+figuras numeradas a `article/images/`.
 
-## Project Structure
+Los repositorios anteriores a 2026 que todavía no tienen `MASTER.R` explican
+cómo replicar en `documentation/ficha.md`.
 
-```text
-.
-├── MASTER.R
-├── borrador_articulo_quantificador.md
-├── code/
-│   ├── cleaning/
-│   └── analysis/
-├── data/
-│   ├── raw/
-│   ├── intermediate/
-│   └── final/
-├── outputs/
-│   ├── figures/
-│   └── tables/
-└── documentation/
-    └── archive/
-```
+Para ver el artículo, abre `article/index.Rmd` en RStudio y usa Knit. La
+versión publicada se genera desde el repositorio del sitio con `blogdown`.
 
-## Data Access
+## Requisitos
 
-Los insumos provienen de un pipeline de recoleccion separado que consolida ofertas laborales publicas para roles de datos y tecnologia en Ecuador. La capa de scraping se documenta por separado y por ahora no se transparenta en este repositorio.
+- R y los paquetes listados en `documentation/ficha.md`.
+- Los scripts no instalan paquetes. Si falta alguno, R se detiene en
+  `library()` y te dice cuál es.
+- Para revisar el estilo del código: `lintr` y `styler`
+  (`Rscript code/setup/style_project.R`).
 
-Los cortes crudos (`ofertas_2026-06-17.csv`, `ofertas_2026-07-16.csv` y `ofertas_2026-07-26.csv`) ya no se publican en este repositorio. Contienen texto de ofertas, nombres de empresas y enlaces tomados de portales de terceros, sobre los cuales LIDE no tiene derechos. Las tablas agregadas que sustentan el articulo siguen disponibles en `outputs/tables/`.
-
-Para replicar el analisis desde los cortes crudos, escribe a elquantificador@laboratoriolide.org y evaluamos el acceso caso por caso. Una vez que tengas los archivos, colocalos en `data/raw/` y corre `source("MASTER.R")`.
-
-## Current Analytical Scope
-
-El flujo actual:
-
-1. acumula todos los cortes disponibles de junio y julio;
-2. elimina duplicados por `source` y `job_id`, conservando la observacion mas reciente y con descripcion mas completa;
-3. filtra al universo analitico marcado por el pipeline de recoleccion;
-4. construye una submuestra con ofertas que declaran habilidades;
-5. calcula herramientas, competencias tecnicas, combinaciones y composicion ocupacional.
-
-Las cifras se regeneran cada vez que se ejecuta `MASTER.R`, por lo que los totales dependen de los cortes acumulados presentes en `data/raw/`.
-
-## Outputs
-
-Las principales salidas actuales son:
-
-- figuras en `outputs/figures/`;
-- tablas en `outputs/tables/`;
-- un resumen serializado en `outputs/mercado_datos_resumen.rds`.
-
-## Article Draft
-
-La version lista para El Quantificador vive en `final_version/`, siguiendo el formato de los repositorios de articulos de la publicacion:
+## Estructura
 
 ```text
-final_version/
-├── index.Rmd
-└── images/grafico1..4.png
+MASTER.R               Punto de entrada: ejecuta el pipeline en orden
+article/               Artículo listo para copiar al sitio (index.Rmd)
+code/cleaning/         Descarga y limpieza de cada fuente
+code/analysis/         Cálculos, tablas y figuras
+code/functions/        Funciones compartidas por más de un script
+code/setup/            Herramientas fuera del pipeline (estilo y lint)
+data/raw/              Descargas originales, sin modificar (no se versionan)
+data/intermediate/     Bases limpias por fuente (no se versionan)
+data/final/            Bases listas para el análisis (no se versionan)
+documentation/         Ficha del artículo, fuentes, diccionarios y notas
+outputs/graphs/        Figuras generadas por el código
+outputs/tables/        Tablas generadas por el código
 ```
 
-`index.Rmd` es la fuente del articulo. Las figuras de `final_version/images/` las copia el script de analisis desde `outputs/figures/`, asi que no se editan a mano. Para previsualizar:
+## Datos
 
-```bash
-quarto render final_version/index.Rmd --to html --embed-resources
-```
+Las fuentes de cada artículo están en `documentation/fuentes.csv`, con su
+enlace oficial. Los datos crudos no se versionan: el script de descarga los
+vuelve a obtener. Los datos de terceros conservan los términos de su fuente
+(ver `DATA-NOTICE.md`).
 
-El HTML resultante es un artefacto de compilacion: se regenera cuando haga falta y no se versiona.
+## Publicación en el sitio
 
-`borrador_articulo_quantificador.md` es el borrador previo a la conversion al formato de la publicacion. Las versiones anteriores se guardan en `documentation/archive/`.
+Copia el contenido de `article/` a `content/post/[categoria]/[slug]/` en el
+repositorio del sitio. Revisa que `authors` coincida con un archivo de
+`content/los-quantificadores/` y que `repository_url` apunte a este
+repositorio.
 
-## Article Status
-
-Este repositorio ya deja lista la base reproducible del analisis. El siguiente paso es refrescar el borrador del articulo con las nuevas cifras acumuladas de junio y julio, manteniendo el foco en lo que el mercado realmente pide en las vacantes publicas.
-
+Si un gráfico del artículo se publica también en redes o en Visualizaciones,
+se rehace en `graficos-el-quantificador` a partir de una tabla de
+`data/final/` o `outputs/tables/`, con su propia fila en el catálogo.
 
 ## Licencias y cómo citar
 
@@ -98,4 +84,5 @@ Este repositorio ya deja lista la base reproducible del analisis. El siguiente p
 Las cifras y resultados pueden citarse libremente. Menciona a los autores y a
 El Quantificador (LIDE) y enlaza la publicación original. Los usos comerciales
 de gráficos, tablas o texto requieren autorización previa:
-elquantificador@laboratoriolide.org. Ver también `CITATION.cff`.
+elquantificador@laboratoriolide.org. Ver también `CITATION.cff` y
+`CONTRIBUTING.md`.
