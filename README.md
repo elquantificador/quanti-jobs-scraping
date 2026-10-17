@@ -38,11 +38,9 @@ Este repositorio usa cortes acumulados de ofertas laborales publicas en Multitra
 
 Los insumos provienen de un pipeline de recoleccion separado que consolida ofertas laborales publicas para roles de datos y tecnologia en Ecuador. La capa de scraping se documenta por separado y por ahora no se transparenta en este repositorio.
 
-Los archivos de entrada que si se incluyen aqui son:
+Los cortes crudos (`ofertas_2026-06-17.csv`, `ofertas_2026-07-16.csv` y `ofertas_2026-07-26.csv`) ya no se publican en este repositorio. Contienen texto de ofertas, nombres de empresas y enlaces tomados de portales de terceros, sobre los cuales LIDE no tiene derechos. Las tablas agregadas que sustentan el articulo siguen disponibles en `outputs/tables/`.
 
-- `data/raw/ofertas_2026-06-17.csv`
-- `data/raw/ofertas_2026-07-16.csv`
-- `data/raw/ofertas_2026-07-26.csv`
+Para replicar el analisis desde los cortes crudos, escribe a elquantificador@laboratoriolide.org y evaluamos el acceso caso por caso. Una vez que tengas los archivos, colocalos en `data/raw/` y corre `source("MASTER.R")`.
 
 ## Current Analytical Scope
 
@@ -87,3 +85,17 @@ El HTML resultante es un artefacto de compilacion: se regenera cuando haga falta
 ## Article Status
 
 Este repositorio ya deja lista la base reproducible del analisis. El siguiente paso es refrescar el borrador del articulo con las nuevas cifras acumuladas de junio y julio, manteniendo el foco en lo que el mercado realmente pide en las vacantes publicas.
+
+
+## Licencias y cómo citar
+
+- **Código:** [MIT](LICENSE).
+- **Texto, figuras y tablas:** [CC BY-NC 4.0](LICENSE-content).
+- **Datos de terceros:** conservan los términos de su fuente
+  ([aviso](DATA-NOTICE.md)).
+- **Nombre y logotipos:** todos los derechos reservados.
+
+Las cifras y resultados pueden citarse libremente. Menciona a los autores y a
+El Quantificador (LIDE) y enlaza la publicación original. Los usos comerciales
+de gráficos, tablas o texto requieren autorización previa:
+elquantificador@laboratoriolide.org. Ver también `CITATION.cff`.

@@ -4,9 +4,7 @@
 Contiene los cortes acumulados de ofertas publicas usados como insumo del analisis reproducible.
 
 ## Contents
-- `ofertas_2026-06-17.csv`
-- `ofertas_2026-07-16.csv`
-- `ofertas_2026-07-26.csv`
+Los cortes `ofertas_2026-06-17.csv`, `ofertas_2026-07-16.csv` y `ofertas_2026-07-26.csv` no se publican en el repositorio (contienen contenido de terceros). Coloca aqui tus copias para replicar el analisis. Ver `DATA-NOTICE.md`.
 
 ## Naming Convention
 Cada archivo usa la fecha del corte en formato `YYYY-MM-DD`.
