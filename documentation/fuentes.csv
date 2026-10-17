@@ -1,0 +1,4 @@
+source_name,institution,period,official_url,downloaded_file,script
+Ofertas laborales públicas de Multitrabajos (cortes acumulados),Multitrabajos,2026-06-17 a 2026-07-26,,"data/raw/ofertas_2026-06-17.csv; data/raw/ofertas_2026-07-16.csv; data/raw/ofertas_2026-07-26.csv (en Google Drive 1Z_-KHkDkI-1l5l89uROfBb5n_A8HZqAz; no versionados)",manual
+Ofertas laborales públicas de Computrabajo (cortes acumulados),Computrabajo,2026-06-17 a 2026-07-26,,los mismos tres cortes crudos (columna source = computrabajo),manual
+Ofertas laborales públicas de Mipleo (cortes acumulados),Mipleo,2026-06-17 a 2026-07-26,,los mismos tres cortes crudos (columna source = mipleo),manual

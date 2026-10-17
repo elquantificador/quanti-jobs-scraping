@@ -6,50 +6,50 @@ repositorios.
 
 ## Identificación
 
-- **Título:** [COMPLETAR: título tal como se publicó]
-- **Autoría:** [COMPLETAR: nombres, igual que en el sitio]
-- **Fecha de publicación:** [COMPLETAR: AAAA-MM-DD]
-- **Artículo publicado:** [COMPLETAR: enlace a elquantificador.org]
-- **Categoría:** [COMPLETAR: Economía, Política, Salud, Educación o Valores y
-  comportamiento]
-- **Edición:** [COMPLETAR: por ejemplo, Julio-Diciembre 2026]
+- **Título:** ¿Qué quieren los empleadores ecuatorianos cuando buscan perfiles de datos?
+- **Autoría:** Daniel Sánchez Pazmiño
+- **Fecha de publicación:** 2026-08-06
+- **Artículo publicado:** https://elquantificador.org/post/economia/2026-08-06-que-quieren-los-empleadores-ecuatorianos/
+- **Categoría:** Economía
+- **Edición:** Julio-Diciembre 2026
 
 ## Estado
 
-[COMPLETAR: en preparación, en revisión editorial o publicado. Anota qué falta
-para cerrar el artículo.]
+Publicado el 2026-08-06. En el sitio, el repositorio enlazado es `dsanchezp18/quanti-jobs-scraping`; este es su repositorio en la organización. El borrador `final_version/index.Rmd` usa un slug distinto del publicado; el título coincide.
 
 ## Pregunta y alcance
 
-[COMPLETAR: dos o tres oraciones con la pregunta, el periodo, la cobertura
-geográfica y la unidad de análisis.]
+El artículo pregunta qué piden hoy los empleadores ecuatorianos cuando contratan perfiles vinculados a datos, con foco en herramientas y competencias técnicas. Usa ofertas laborales públicas de Multitrabajos, Computrabajo y Mipleo, acumuladas en tres cortes entre el 17 de junio y el 26 de julio de 2026, con cobertura nacional. La unidad de análisis es la oferta única por portal y anuncio: 1.536 registros brutos, 916 ofertas únicas, 523 en el universo analítico y 457 con habilidades declaradas.
 
 ## Requisitos
 
-- R [COMPLETAR: versión, por ejemplo 4.5.x].
-- Paquetes de R: [COMPLETAR: lista en orden alfabético].
+- R: no documentada en el repositorio (los scripts terminan con `sessionInfo()`, pero su resultado no se guardó).
+- Paquetes de R: dplyr, forcats, ggplot2, readr, scales, stringr, svglite, tibble, tidyr.
 
 ## Fuentes de datos
 
 | Fuente | Institución | Periodo | Acceso | Script |
 |---|---|---|---|---|
-| [COMPLETAR] | [COMPLETAR] | [COMPLETAR] | [COMPLETAR: descarga automática o manual] | `code/cleaning/00_download_fuente.R` |
+| Ofertas laborales públicas de Multitrabajos, Computrabajo y Mipleo (tres cortes acumulados) | Portales Multitrabajos, Computrabajo y Mipleo; recolección por un pipeline separado de LIDE, no publicado | 2026-06-17 a 2026-07-26 | Manual: los cortes crudos ya no se publican y se guardan en Google Drive (carpeta "Habilidades en ofertas de datos Ecuador 2026", id `1Z_-KHkDkI-1l5l89uROfBb5n_A8HZqAz`) | `code/cleaning/01_build_analysis_sample.R` lee `data/raw/` |
 
-Si alguna fuente no permite descarga automática, explica aquí cómo obtenerla y
-dónde colocarla en `data/raw/`.
+Los cortes `ofertas_2026-06-17.csv`, `ofertas_2026-07-16.csv` y `ofertas_2026-07-26.csv` contienen texto de ofertas, nombres de empresas y enlaces de portales de terceros, por lo que LIDE decidió no publicarlos (ver `DATA-NOTICE.md`). Se guardan en la carpeta de Google Drive indicada; para obtenerlos, escribe a elquantificador@laboratoriolide.org y colócalos en `data/raw/`. El código de scraping no forma parte de este repositorio. Ni el repositorio ni el artículo citan una dirección oficial de cada portal.
 
 ## Salidas
 
-- `outputs/tables/[COMPLETAR].csv`: [COMPLETAR: qué contiene].
-- `outputs/graphs/[COMPLETAR].png`: [COMPLETAR: qué muestra].
-- `article/images/graficoN.png`: copias numeradas según el orden del texto.
+- `outputs/tables/`: `embudo_muestra.csv` y `cortes_acumulados.csv` (conteos del filtrado y de los cortes); `herramientas_demandadas.csv`, `competencias_tecnicas.csv`, `habilidades_suaves.csv` y `combinaciones_herramientas.csv` (menciones en ofertas con habilidades); `familias_ocupacionales.csv`, `skills_familias_principales.csv`, `fuentes_ofertas.csv`, `ciudades_ofertas.csv` y `modalidad_ofertas.csv` (composición del universo por familia, portal, ciudad y modalidad).
+- `outputs/figures/`: `familias_ocupacionales`, `herramientas_demandadas`, `competencias_tecnicas` y `habilidades_suaves`, en `.png` y `.svg`.
+- `outputs/mercado_datos_resumen.rds`: resumen serializado de las tablas.
+- `final_version/images/grafico1` a `grafico4` (`.png` y `.svg`): copias numeradas de las figuras según el orden del texto (1 familias, 2 herramientas, 3 competencias, 4 habilidades suaves).
+- `data/intermediate/ofertas_unicas.rds`, `data/final/ofertas_universo_analitico.csv` y `data/final/ofertas_con_habilidades.csv`: se generan al correr el flujo y no se versionan.
 
 ## Cómo replicar en este repositorio
 
-Este repositorio conserva sus instrucciones originales en la sección
-"README anterior". Si todavía no tiene `MASTER.R`, sigue esas instrucciones.
-Cuando se migre a la estructura estándar, reemplaza esta sección por los pasos
-de `MASTER.R`.
+1. Abre el proyecto desde la raíz del repositorio e instala los paquetes de la lista de requisitos.
+2. Obtén los tres cortes crudos de la carpeta de Google Drive "Habilidades en ofertas de datos Ecuador 2026" (id `1Z_-KHkDkI-1l5l89uROfBb5n_A8HZqAz`; pide acceso a elquantificador@laboratoriolide.org) y colócalos en `data/raw/`. El script de limpieza se detiene si no encuentra archivos de junio o julio.
+3. Corre `source("MASTER.R")`. Ejecuta en orden `code/cleaning/01_build_analysis_sample.R` (acumula los cortes, elimina duplicados por portal y anuncio, filtra el universo analítico y la submuestra con habilidades) y `code/analysis/01_market_tools_outputs.R` (tablas, figuras, resumen `.rds` y copia de las figuras a `final_version/images/`).
+4. Para ver el artículo: `quarto render final_version/index.Rmd --to html --embed-resources`. El HTML no se versiona.
+
+Sin los cortes crudos solo se pueden consultar las tablas agregadas de `outputs/tables/`.
 
 ## README anterior
 
